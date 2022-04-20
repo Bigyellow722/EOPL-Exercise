@@ -35,6 +35,8 @@
 
 (define empty-env? null?)
 
+(define empty-env? null?)
+
 (define extend-env
   (lambda (var val env)
     (cons
@@ -55,7 +57,7 @@
 (define apply-env
   (lambda (search-var env)
     (cond
-     ((null? env) (report-no-binding-found search-var))
+     ((empty-env? env) (report-no-binding-found search-var))
      ((not (is-env? env)) (report-invalid-env env))
      (else
       (if (eqv? (caar env) search-var)
@@ -67,5 +69,22 @@
   (extend-env 'a 1
 	      (extend-env 'b 2
 			  (extend-env 'c 3 empty-env))))
+
+;;; exercise 2.9
+(define has-binding?
+  (lambda (env search-var)
+    (cond ((not (is-env? env)) (report-invalid-env env))
+	  ((empty-env? env) #f)
+	  (else
+	   (if (eqv? (caar env) search-var)
+	       #t
+	       (has-binding? (cdr env) search-var))))))
+
+;;; exercise 2.10
+(define is-var-val?
+  (lambda (vars vals)
+    (if (eqv? (length vars) (length vals))
+	#t
+	#f)))
 
 
