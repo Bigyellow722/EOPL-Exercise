@@ -4,6 +4,7 @@
   #:autoload (ice-9 format) (format)
   #:export (loge)
   #:export (logi)
+  #:export (report-invalid-vars-vals)
   #:export (report-no-binding-found)
   #:export (report-invalid-env))
 
@@ -14,6 +15,10 @@
 (define logi
   (lambda (msg)
     (display (format #f "msg: ~s\n" msg))))
+
+(define report-invalid-vars-vals
+  (lambda ()
+    (error (format #f "~a: the length of vars is not same as the length of vals" 'extend-env*))))
 
 (define report-no-binding-found
   (lambda (search-var)
