@@ -1,5 +1,7 @@
-(use-modules (ice-9 format))
+(use-modules (base env-error))
 
+
+;;; list representation for env
 ;;; () -> Env
 (define empty-env
   (lambda ()
@@ -10,14 +12,6 @@
   (lambda (var val env)
     (list 'extend-env var val env)))
 
-
-(define report-no-binding-found
-  (lambda (search-var)
-    (error (format #f "~a: No binding for ~s" 'apply-env search-var))))
-
-(define report-invalid-env
-  (lambda (env)
-    (error (format #f "~a: Bad environment: ~s" 'apply-env env))))
 
 ;;; Env x var -> SchemeVal
 (define apply-env
@@ -36,8 +30,10 @@
       (report-invalid-env env)))))
 
 
-(define empty-env
-  (lambda () '()))
+;;; a-list representation for env
+(define empty-env '())
+
+(define empty-env? null?)
 
 (define extend-env
   (lambda (var val env)
@@ -47,7 +43,7 @@
 
 (define is-env?
   (lambda (env)
-    (if (null? env)
+    (if (empty-env? env)
 	#t
 	(cond
 	 ((list? env) (if (pair? (car env))
@@ -70,6 +66,6 @@
 (define e
   (extend-env 'a 1
 	      (extend-env 'b 2
-			  (extend-env 'c 3 (empty-env)))))
+			  (extend-env 'c 3 empty-env))))
 
 
